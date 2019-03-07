@@ -8,12 +8,34 @@
 
 import UIKit
 import CoreData
+import Foundation
 
-class DocumentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DocumentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+    
+    @IBOutlet weak var searchBar: UISearchBar!
+    
     @IBOutlet weak var documentsTableView: UITableView!
     let dateFormatter = DateFormatter()
     var documents = [Document]()
 
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        fetchDocuments()
+        let search : String = searchBar.text ?? ""
+        if(search != ""){
+        documents = documents.filter{($0.name?.lowercased().contains(search.lowercased()))!}
+        }
+        
+        documentsTableView.reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        fetchDocuments()
+        documentsTableView.reloadData()
+    }
+    
+   
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
